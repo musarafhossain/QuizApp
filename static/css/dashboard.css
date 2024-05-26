@@ -1,0 +1,95 @@
+/* Style the navbar */
+*{
+    box-sizing: border-box;
+    margin: 0;
+    user-select: none;
+}
+.navbar {
+    overflow: hidden;
+    background-color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+}
+.navigate{
+    display: flex;
+    margin-left: 10px;
+    gap: 10px;
+    
+}
+
+/* Navbar links */
+.navbar a {
+    width: 120px;
+    height: 40px;
+    border-radius: 7px;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+    font-family: sans-serif;
+    background: -webkit-linear-gradient(right,#004489,#004f9e,#0059b3, #0073e6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar a:hover {
+    background: #0180ff;
+}
+
+/* Right-aligned link */
+.navbar a.right {
+    background: -webkit-linear-gradient(right,#880000,#9d0000,#b30000, #e60000);
+    margin: 5px;
+    border-radius: 7px;
+    width: 120px;
+    height: 40px;
+    font-size: 18px;
+    padding: 7px;
+    font-family: sans-serif;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* On hover, change background color */
+.navbar a.right:hover {
+    background: #ff1a1a;
+}
+
+.new-quiz-button{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3%;
+}
+
+.quiz-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    height: 50px;
+    width: 250px;
+    background-color: rgb(9, 124, 9);
+    color: #fff;
+    font-size: 22px;
+    font-family: sans-serif;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease; /* Smooth transition for scaling */
+}
+
+.quiz-button:hover {
+    transform: scale(1.05); /* Scale the button to 110% on hover */
+}
+
+
+
+
+

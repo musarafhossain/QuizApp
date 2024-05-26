@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/quiz.css') }}">
+    <title>Quiz</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Select Questions</h2>
+        <div class="question-details">
+            <div class="input-q-num  q-input">
+                <label for="no-of-question">Enter Number of Question :</label>
+                <input type="number" name="no-of-question" id="no-of-question">
+            </div>
+            <div class="input-category q-input">
+                <label for="cars">Select Category :</label>
+                <select id="category" name="category">
+                <option value="9">General Knowledge</option>
+                <option value="10">Entertainment: Books</option>
+                <option value="11">Entertainment: Film</option>
+                <option value="12">Entertainment: Music</option>
+                <option value="13">Entertainment: Musicals & Theatres</option>
+                <option value="14">Entertainment: Television</option>
+                <option value="15">Entertainment: Video Games</option>
+                <option value="16">Entertainment: Board Games</option>
+                <option value="17">Science & Nature</option>
+                <option value="18">Science: Computers</option>
+                <option value="19">Science: Mathematics</option>
+                <option value="20">Mythology</option>
+                <option value="21">Sports</option>
+                <option value="22">Geography</option>
+                <option value="23">History</option>
+                <option value="24">Politics</option>
+                <option value="25">Art</option>
+                <option value="26">Celebrities</option>
+                <option value="27">Animals</option>
+                </select>
+            </div>
+            <div class="input-dificulty q-input">
+                <label for="cars">Select Difficulty: :</label>
+                <select id="difficulty" name="difficulty">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+                </select>
+            </div>
+            <button type="button" id="start-quiz-button">Start Quiz</button>
+        </div>
+    </div>
+    <div class="quiz-container">
+        <h1>Quiz App</h1>
+        <div id="question-container">
+          <p id="question-text"></p>
+          <div id="answer-buttons"></div>
+        </div>
+        <div id="controls-container">
+          <button id="start-button">Start Quiz</button>
+          <div id="timer-container">
+            <span id="timer-text">Time Left: <span id="timer">0</span></span>
+          </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
+</body>
+</html>

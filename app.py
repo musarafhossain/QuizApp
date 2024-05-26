@@ -2,9 +2,10 @@ import os
 import random
 import smtplib
 from email.message import EmailMessage
-from flask import Flask, render_template, request, redirect, flash, session
+from flask import Flask, jsonify, render_template, request, redirect, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydb.db'
@@ -22,8 +23,18 @@ class User(db.Model):
     def __repr__(self):
         return f'<User {self.email}>'
 
+class QuizResult(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    score = db.Column(db.Integer, nullable=False)
+    total_questions = db.Column(db.Integer, nullable=False)
+    score_percentage = db.Column(db.Float, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
 @app.route("/otp-verification", methods=['GET', 'POST'])
 def otp_verification():
+    if 'user_id' in session:
+        return redirect('/')
     if request.method == 'POST':
         one = request.form.get('one')
         two = request.form.get('two')
@@ -39,21 +50,45 @@ def otp_verification():
             db.session.add(user)
             db.session.commit()
             flash('User signed up successfully!')
-            return redirect('/dashboard')
+            session['user_id'] = user.id
+            return redirect('/')
         else:
             flash('Invalid OTP, please try again.')
     return render_template('otp.html')
 
-@app.route("/dashboard")
+@app.route("/")
 def dashboard():
     if 'user_id' not in session:
         return redirect('/login')
     return render_template('dashboard.html')
 
+@app.route("/quiz")
+def quiz():
+    if 'user_id' not in session:
+        return redirect('/login')
+    return render_template('quiz.html')
+
+@app.route('/submit_result', methods=['POST'])
+def submit_result():
+    if 'user_id' not in session:
+        return redirect('/login')
+    data = request.json
+    new_result = QuizResult(
+        user_id=session['user_id'],
+        score=data['score'],
+        total_questions=data['total_questions'],
+        score_percentage=data['score_percentage'],
+        timestamp=datetime.utcnow()
+    )
+    db.session.add(new_result)
+    db.session.commit()
+    return jsonify({'message': 'Result saved successfully!'})
+
+
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
     if 'user_id' in session:
-        return redirect('/dashboard')
+        return redirect('/')
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
@@ -85,7 +120,7 @@ def signup():
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     if 'user_id' in session:
-        return redirect('/dashboard')
+        return redirect('/')
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
@@ -93,7 +128,7 @@ def login():
         if user and user.password==password:
             session['user_id'] = user.id
             flash('Login successful!')
-            return redirect('/dashboard')
+            return redirect('/')
         else:
             flash('Invalid email or password, please try again.')
     return render_template('login.html')
