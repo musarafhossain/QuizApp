@@ -89,7 +89,21 @@
     transform: scale(1.05); /* Scale the button to 110% on hover */
 }
 
+/* Add some CSS for styling the chart container */
+.chart-container {
+    width: 95%;
+    margin: auto;
+    margin-top: 5%;
+    padding: 20px;
+    max-width: 800px; /* Optional, to limit the maximum width */
+    position: relative;
+}
 
+canvas {
+    width: 100% !important;
+    height: auto !important;
+   
+}
 
 
 

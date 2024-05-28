@@ -84,6 +84,13 @@ def submit_result():
     db.session.commit()
     return jsonify({'message': 'Result saved successfully!'})
 
+@app.route('/quiz-results')
+def quiz_results():
+    results = QuizResult.query.filter_by(user_id=session['user_id']).all()
+    data = {
+        'scores': [result.score_percentage for result in results]
+    }
+    return jsonify(data)
 
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():

@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dashboard.css') }}">
-    <title>Navbar Example</title>
+    <title>Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -28,9 +29,11 @@
         <a class="quiz-button" href="/quiz" class="right">Start a New Quiz</a>
     </div>
     <div class="details-section">
-        <h1></h1>
+        <div class="chart-container">
+            <canvas id="myChart"></canvas>
+        </div>
     </div>
-
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 </body>
 
 </html>
