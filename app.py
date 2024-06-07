@@ -58,9 +58,10 @@ def otp_verification():
 
 @app.route("/")
 def dashboard():
-    if 'user_id' not in session:
-        return redirect('/login')
-    return render_template('dashboard.html')
+    #if 'user_id' not in session:
+        #return redirect('/login')
+    #return render_template('dashboard.html')
+    return "Hi"
 
 @app.route("/quiz")
 def quiz():
