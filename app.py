@@ -10,7 +10,7 @@ from datetime import datetime
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydb.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = os.urandom(24)  # Set a random secret key
+app.secret_key = 'your_static_secret_key'  # Use a static secret key
 
 db = SQLAlchemy(app)
 
@@ -58,10 +58,10 @@ def otp_verification():
 
 @app.route("/")
 def dashboard():
-    #if 'user_id' not in session:
-        #return redirect('/login')
-    #return render_template('dashboard.html')
-    return "Hi"
+    if 'user_id' not in session:
+        return redirect('/login')
+    return render_template('dashboard.html')
+    #return "<h1>Musaraf Babu</h1>"
 
 @app.route("/quiz")
 def quiz():
@@ -150,3 +150,4 @@ def logout():
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
+    app.run()
