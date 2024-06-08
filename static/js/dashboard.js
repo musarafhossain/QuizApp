@@ -22,24 +22,33 @@ const myChart = new Chart(ctx, {
     },
     options: {
         responsive: true, // Make the chart responsive
-        maintainAspectRatio: true, // Allow the chart to change aspect ratio
+        maintainAspectRatio: false,
         scales: {
             x: {
                 beginAtZero: true,
                 title: {
                     display: true,
                     text: 'Attempts'
+                },
+                ticks: {
+                    autoSkipPadding: 10 // Set the interval between the ticks
                 }
             },
             y: {
                 beginAtZero: true,
+                min: 0,      // Set the minimum value for the y-axis
+                max: 100,    // Set the maximum value for the y-axis
                 title: {
                     display: true,
                     text: 'Percentage'
+                },
+                ticks: {
+                    stepSize: 10 // Show y-axis ticks at intervals of 5
                 }
             }
         }
     }
 });
+
 };
 

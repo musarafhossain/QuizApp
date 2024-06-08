@@ -7,12 +7,19 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dashboard.css') }}">
     <title>Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+ 
+        .large-column {
+            overflow-x: scroll;
+        }
+ 
+    </style>
 </head>
 
 <body>
 
     <!-- Navbar -->
-    <div class="navbar">
+    <div class="navbar header">
         <!-- Left side links -->
         <div class="navigate">
         <a href="/">Home</a>
@@ -23,14 +30,34 @@
         <!-- Right side link (Logout button) -->
         <a href="/logout" class="right">Logout</a>
     </div>
+    <input type="checkbox" class="openSidebarMenu" id="openSidebarMenu">
+    <label for="openSidebarMenu" class="sidebarIconToggle">
+        <div class="spinner diagonal part-1"></div>
+        <div class="spinner horizontal"></div>
+        <div class="spinner diagonal part-2"></div>
+    </label>
+    <div id="sidebarMenu">
+        <ul class="sidebarMenuInner">
+            <li><a href="/">Home</a></li>
+            <li><a href="#profile" target="_blank">Profile</a></li>
+            <li><a href="#about" target="_blank">About Us</a></li>
+            <li><a href="#contact" target="_blank">Contact Us</a></li>
+        </ul>
+    </div>
 
     <!-- Page content -->
     <div class="new-quiz-button">
         <a class="quiz-button" href="/quiz" class="right">Start a New Quiz</a>
     </div>
     <div class="details-section">
-        <div class="chart-container">
-            <canvas id="myChart"></canvas>
+        <div class="chart-box">
+            <div class="chart-container">
+                <div class="large-column">
+                    <div class="container">
+                        <canvas id="myChart"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
