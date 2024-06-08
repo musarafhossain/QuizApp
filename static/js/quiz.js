@@ -127,7 +127,8 @@ startBtn.addEventListener('click', async function () {
   
       // End the quiz if time runs out
       if (timeLeft <= 0) {
-        endQuiz();
+        //endQuiz();
+        checkAnswer('');
       }
     }, 1000);
   }
