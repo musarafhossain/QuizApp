@@ -7,13 +7,6 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dashboard.css') }}">
     <title>Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
- 
-        .large-column {
-            overflow-x: scroll;
-        }
- 
-    </style>
 </head>
 
 <body>
@@ -51,15 +44,32 @@
     </div>
     <div class="details-section">
         <div class="chart-box">
-            <div class="chart-container">
-                <div class="large-column">
-                    <div class="container">
-                        <canvas id="myChart"></canvas>
-                    </div>
+            <div class="large-column">
+                <div class="container">
+                    <canvas id="myChart"></canvas>
                 </div>
             </div>
         </div>
+        <div class="table-container">
+            <table id="statementTable">
+                    <thead>
+                        <tr>
+                            <th scope="col">Topic</th>
+                            <th scope="col">Your Score</th>
+                            <th scope="col">Total Marks</th>
+                            <th scope="col">Total Questions</th>
+                            <th scope="col">Date and Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Rows will be added here by JavaScript -->
+                    </tbody>
+            </table>
+        </div>
     </div>
+    <footer>
+        &copy; 2024 Musaraf Hossain. All rights reserved.
+    </footer>
     <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 </body>
 

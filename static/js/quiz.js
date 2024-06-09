@@ -1,12 +1,17 @@
 var quizQuestions = [];
+let topic;
+const modal = document.querySelector(".modal");
+const overlay = document.querySelector(".overlay");
 // Get the button element
 const startBtn = document.getElementById('start-quiz-button');
 
 // Add event listener to the button
 startBtn.addEventListener('click', async function () {
+    openModal();
     // Get input values
     const numberOfQuestions = document.getElementById('no-of-question').value;
     const category = document.getElementById('category').value;
+    topic = category
     const difficulty = document.getElementById('difficulty').value;
 
     // Check if inputs are not empty
@@ -52,6 +57,7 @@ startBtn.addEventListener('click', async function () {
         // Inputs are empty, show error message or take appropriate action
         alert('Please fill in all fields.');
     }
+    closeModal();
 });
 
   
@@ -81,6 +87,8 @@ startBtn.addEventListener('click', async function () {
   
     // Display the current question
     questionText.innerHTML = currentQuestion.question;
+    // Update the timer text
+    document.getElementById("qus-no").textContent = `${currentQuestionIndex}/${quizQuestions.length}`;
   
     // Create answer buttons for each option
     currentQuestion.options.forEach(option => {
@@ -109,9 +117,8 @@ startBtn.addEventListener('click', async function () {
     currentQuestionIndex++;
   
     if (currentQuestionIndex < quizQuestions.length) {
-        timeLeft = 31;
+        timeLeft = 30;
       displayQuestion();
-      
     } else {
       endQuiz();
     }
@@ -137,7 +144,7 @@ startBtn.addEventListener('click', async function () {
 function endQuiz() {
     // Stop the timer
     clearInterval(timerInterval);
-  
+    document.getElementById("qus-no").textContent = `${currentQuestionIndex}/${quizQuestions.length}`;
     // Calculate the score percentage
     const scorePercentage = ((score / quizQuestions.length) * 100).toFixed(2);
   
@@ -174,7 +181,8 @@ function endQuiz() {
       body: JSON.stringify({
         score: score,
         total_questions: quizQuestions.length,
-        score_percentage: scorePercentage
+        score_percentage: scorePercentage,
+        topic: topic,
       })
     })
     .then(response => response.json())
@@ -187,5 +195,17 @@ function endQuiz() {
   }
   
   
-  // Add event listener to start the quiz when the start button is clicked
-  document.getElementById("start-button").addEventListener("click", startQuiz);
+// Add event listener to start the quiz when the start button is clicked
+document.getElementById("start-button").addEventListener("click", startQuiz);
+
+const openModal = function () {
+  modal.classList.remove("hidden");
+  overlay.classList.remove("hidden");
+};
+
+const closeModal = function () {
+  modal.classList.add("hidden");
+  overlay.classList.add("hidden");
+};
+
+//overlay.addEventListener("click", closeModal);

@@ -59,9 +59,17 @@
           <button id="start-button">Start Quiz</button>
           <div id="timer-container">
             <span id="timer-text">Time Left: <span id="timer">0</span></span>
+            <span id="qus-done-txt">Questions Done: <span id="qus-no">0</span></span>
           </div>
         </div>
     </div>
+
+    <section class="modal hidden">
+        <div class="modal-child">
+            <div class="loader"></div>
+        </div>
+    </section>
+    <div class="overlay hidden"></div>
     <script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
 </body>
 </html>

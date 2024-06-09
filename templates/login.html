@@ -31,6 +31,9 @@
               <div class="field">
                 <input type="password" placeholder="Password" required name="password">
               </div>
+              {% if data %}
+                <p class="err-msg">{{ data }}</p>
+              {% endif %}
               <div class="pass-link"><a href="#">Forgot password?</a></div>
               <div class="field btn">
                 <div class="btn-layer"></div>
@@ -56,6 +59,8 @@
           </div>
         </div>
     </div> 
+    <div>
+    </div>
     <script src="{{ url_for('static', filename='js/login.js') }}"></script> 
 </body>
 </html>

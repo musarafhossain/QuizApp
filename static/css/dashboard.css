@@ -1,12 +1,16 @@
-@import url('https://fonts.googleapis.com/css?family=Varela+Round');
-
-/* Style the navbar */
 *{
     box-sizing: border-box;
     margin: 0;
     user-select: none;
-    font-family: 'Varela Round', sans-serif;
+    font-family: sans-serif;
+    height: fit-content;
 }
+
+body{
+    line-height: 1.25;
+}
+
+/*--------------------------Style the navbar-----------------------------*/
 .navbar {
     overflow: hidden;
     background-color: #000;
@@ -15,6 +19,7 @@
     justify-content: space-between;
     height: 50px;
 }
+
 .navigate{
     display: flex;
     margin-left: 10px;
@@ -22,7 +27,6 @@
     
 }
 
-/* Navbar links */
 .navbar a {
     width: 120px;
     height: 40px;
@@ -43,7 +47,6 @@
     background: #0180ff;
 }
 
-/* Right-aligned link */
 .navbar a.right {
     background: -webkit-linear-gradient(right,#880000,#9d0000,#b30000, #e60000);
     margin: 5px;
@@ -59,11 +62,16 @@
     justify-content: center;
 }
 
-/* On hover, change background color */
 .navbar a.right:hover {
     background: #ff1a1a;
 }
 
+#openSidebarMenu, #sidebarMenu{
+    display: none;
+}
+/*-------------------------- End style the navbar-----------------------------*/
+
+/*--------------------------Style the new quiz button-----------------------------*/
 .new-quiz-button{
     width: 100%;
     display: flex;
@@ -85,30 +93,100 @@
     font-family: sans-serif;
     border-radius: 10px;
     cursor: pointer;
-    transition: transform 0.3s ease; /* Smooth transition for scaling */
+    transition: transform 0.3s ease;
 }
 
 .quiz-button:hover {
-    transform: scale(1.05); /* Scale the button to 110% on hover */
+    transform: scale(1.05);
 }
+/*-------------------------- End style the new quiz button-----------------------------*/
 
-/* Add some CSS for styling the chart container */
+/*--------------------------Style the details section-----------------------------*/
+.details-section {
+    display: flex;
+    height: fit-content;
+    margin: 2% 2%;
+    gap: 1%;
+    justify-content: center;
+    height: 450px;
+    align-items: flex-end;
+}
+/*--------------------------Style the graph-----------------------------*/
 .chart-container {
     width: 95%;
     margin: auto;
     margin-top: 5%;
     padding: 20px;
-    max-width: 800px; /* Optional, to limit the maximum width */
+    max-width: 800px;
     position: relative;
+}
+
+.container{
+    min-width: 100%;
+}
+
+.details-section .chart-box {
+    width: 50%;
+}
+
+.large-column {
+    overflow-x: scroll;
 }
 
 canvas{
     height: 360px;
 }
-
-#openSidebarMenu, #sidebarMenu{
-    display: none;
+/*--------------------------End style the graph-----------------------------*/
+/*--------------------------Style the table-----------------------------*/
+.details-section .table-container{
+    width: 50%;
+    overflow: scroll;
+    height: 100%;
+    overflow-x: hidden;
 }
+
+table {
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    table-layout: fixed;
+}
+  
+table caption {
+    font-size: 1.5em;
+    margin: .5em 0 .75em;
+}
+  
+table tr {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    padding: .35em;
+}
+  
+table th,
+table td {
+    padding: .625em;
+    text-align: center;
+}
+  
+table th {
+    font-size: .85em;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+/*-------------------------- End Style the table-----------------------------*/
+/*--------------------------Style the details section-----------------------------*/
+
+/*--------------------------Style the footer-----------------------------*/
+footer {
+    background-color: #f2f2f2;
+    text-align: center;
+    padding: 10px 0;
+    width: 100%;
+}
+/*--------------------------End style the footer-----------------------------*/
 
 /* Styles for mobile devices */
 @media only screen and (max-width: 768px) {
@@ -231,6 +309,63 @@ canvas{
         transform: rotate(-135deg);
         margin-top: -9px;
     }
-}
-  
 
+    .details-section{
+        display: block;
+        height: fit-content;
+    }
+
+    .details-section .chart-box {
+        width: 100%;
+    }
+
+    .details-section .table-container{
+        width: 100%;
+        margin-top: 5%;
+        height: 450px;
+    }
+
+    table {
+        border: 0;
+    }
+    
+    table caption {
+        font-size: 1.3em;
+    }
+      
+    table thead {
+        border: none;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+      
+    table tr {
+        border-bottom: 3px solid #ddd;
+        display: block;
+        margin-bottom: .625em;
+    }
+      
+    table td {
+        border-bottom: 1px solid #ddd;
+        display: block;
+        font-size: .8em;
+        text-align: right;
+    }
+      
+    table td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+      
+    table td:last-child {
+        border-bottom: 0;
+    }
+}
+/* End Styles for mobile devices */

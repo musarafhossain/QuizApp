@@ -29,6 +29,7 @@ class QuizResult(db.Model):
     score = db.Column(db.Integer, nullable=False)
     total_questions = db.Column(db.Integer, nullable=False)
     score_percentage = db.Column(db.Float, nullable=False)
+    topic = db.Column(db.String, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
 @app.route("/otp-verification", methods=['GET', 'POST'])
@@ -76,14 +77,26 @@ def submit_result():
     data = request.json
     new_result = QuizResult(
         user_id=session['user_id'],
+        topic=data['topic'],
         score=data['score'],
         total_questions=data['total_questions'],
         score_percentage=data['score_percentage'],
-        timestamp=datetime.utcnow()
+        timestamp=datetime.utcnow(),
     )
     db.session.add(new_result)
     db.session.commit()
     return jsonify({'message': 'Result saved successfully!'})
+
+@app.route('/get-data')
+def get_data():
+    results = QuizResult.query.filter_by(user_id=session['user_id']).all()
+    data = {
+        'scores': [result.score_percentage for result in results],
+        'total_qus': [result.total_questions for result in results],
+        'date_time': [result.timestamp for result in results],
+        'topic': [result.topic for result in results],
+    }
+    return jsonify(data)
 
 @app.route('/quiz-results')
 def quiz_results():
@@ -138,7 +151,7 @@ def login():
             flash('Login successful!')
             return redirect('/')
         else:
-            flash('Invalid email or password, please try again.')
+            return render_template('login.html', data = 'Invalid email or password, please try again.')
     return render_template('login.html')
 
 @app.route("/logout")
@@ -150,4 +163,4 @@ def logout():
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    app.run()
+    app.run(debug=True)
