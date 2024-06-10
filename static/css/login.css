@@ -202,3 +202,17 @@ form .btn input[type="submit"]{
   color: red;
   margin-top: 5px;
 }
+
+@media only screen and (max-width: 768px) {
+html, body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* gap: 2%; */
+    flex-wrap: wrap;
+    height: 100%;
+    /* width: 100%; */
+    /* place-items: center; */
+    /* padding: 1%; */
+  }
+}
