@@ -103,6 +103,14 @@ function addDataToTable(data) {
         scoreCell.setAttribute("data-label", "Your Score");
         row.appendChild(scoreCell);
 
+        if(data.scores[i] >= 60){
+            row.style.backgroundColor = '#C3FF93';
+        }else if(data.scores[i] >= 30){
+            row.style.backgroundColor = '#FFDB5C';
+        }else{
+            row.style.backgroundColor = '#FA7070';
+        }
+
         const totalMarksCell = document.createElement("td");
         totalMarksCell.textContent = 100;
         totalMarksCell.setAttribute("data-label", "Total Marks");

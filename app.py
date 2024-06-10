@@ -1,10 +1,8 @@
-import os
 import random
 import smtplib
 from email.message import EmailMessage
 from flask import Flask, jsonify, render_template, request, redirect, flash, session
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
 app = Flask(__name__)
@@ -163,4 +161,4 @@ def logout():
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    app.run(debug=True)
+    app.run()
