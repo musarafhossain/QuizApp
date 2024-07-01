@@ -26,6 +26,11 @@
           <input type="number" disabled name="five"/>
           <input type="number" disabled name="six"/>
         </div>
+        <div>
+          {% if data %}
+            <p class="err-msg">{{ data }}</p>
+          {% endif %}
+        </div>
         <button>Verify OTP</button>
       </form>
     </div>

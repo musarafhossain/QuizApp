@@ -31,12 +31,6 @@ document.getElementById('signupForm').addEventListener('submit', function(event)
         return;
     }
     
-    // Check password strength (you can customize this function)
-    if (!checkPasswordStrength(password)) {
-        alert('Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.');
-        return;
-    }
-    
     // If all validations pass, submit the form (you can also perform AJAX submission here)
     this.submit();
 });

@@ -83,3 +83,8 @@ form button.active {
 form button:hover {
   background: #0e4bf1;
 }
+
+.err-msg{
+  color: red;
+  margin-top: 5px;
+}

@@ -45,14 +45,17 @@ def otp_verification():
         if entered_otp == session.get('otp'):
             email = session.get('email')
             password = session.get('password')
-            user = User(email=email, password=password)
-            db.session.add(user)
-            db.session.commit()
-            flash('User signed up successfully!')
-            session['user_id'] = user.id
+            if not check_email_exists(email):
+                user = User(email=email, password=password)
+                db.session.add(user)
+                db.session.commit()
+                session['user_id'] = user.id
+            else:
+                user = User.query.filter_by(email=email).first()
+                session['user_id'] = user.id
             return redirect('/')
         else:
-            flash('Invalid OTP, please try again.')
+            return render_template('otp.html', data = 'Incorrect OTP')
     return render_template('otp.html')
 
 @app.route("/")
@@ -61,6 +64,59 @@ def dashboard():
         return redirect('/login')
     return render_template('dashboard.html')
     #return "<h1>Musaraf Babu</h1>"
+
+@app.route("/profile")
+def profile():
+    if 'user_id' not in session:
+        return redirect('/login')
+
+    user = User.query.filter_by(id=session['user_id']).first()  # Get the single user instance
+
+    if not user:
+        return redirect('/login')  # Redirect if user not found (additional safety check)
+
+    data = {
+        'email': user.email,
+        'password': user.password,
+    }
+
+    print(data)
+    return render_template('profile.html', email=data['email'], password=data['password'])
+
+@app.route("/forgot")
+def forgot():
+    return render_template('forgot.html')
+
+@app.route("/forgot-password", methods=['POST'])
+def forgot_password():
+    if 'user_id' in session:
+        return redirect('/')
+    if request.method == 'POST':
+        email = request.form.get('email')
+
+        # Check if email already exists
+        if not check_email_exists(email):
+            return render_template('forgot.html', data = 'Email not exist. Please sign up')
+        else:
+            # Generate OTP
+            otp = ''.join(str(random.randint(0, 9)) for _ in range(6))
+            session['otp'] = otp
+            session['email'] = email
+
+            # Send OTP via email
+            server = smtplib.SMTP('smtp.gmail.com', 587)
+            server.starttls()
+            from_mail = 'musarafhossainofficial33@gmail.com'
+            server.login(from_mail, 'pzzf dobv etuu fcun')
+            to_mail = email
+            msg = EmailMessage()
+            msg['Subject'] = 'OTP Verification'
+            msg['From'] = from_mail
+            msg['To'] = to_mail
+            msg.set_content("Your OTP is: " + otp)
+            server.send_message(msg)
+            server.quit()
+            return redirect('/otp-verification')
 
 @app.route("/quiz")
 def quiz():
@@ -104,6 +160,9 @@ def quiz_results():
     }
     return jsonify(data)
 
+def check_email_exists(email):
+    return User.query.filter_by(email=email).first()
+
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
     if 'user_id' in session:
@@ -111,6 +170,10 @@ def signup():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
+
+        # Check if email already exists
+        if check_email_exists(email):
+            return render_template('login.html', data = 'User already exists. You can login or reset your password.')
 
         # Generate OTP
         otp = ''.join(str(random.randint(0, 9)) for _ in range(6))
@@ -131,8 +194,6 @@ def signup():
         msg.set_content("Your OTP is: " + otp)
         server.send_message(msg)
         server.quit()
-
-        flash('OTP sent to your email address.')
         return redirect('/otp-verification')
     return render_template('login.html')
 
@@ -161,4 +222,4 @@ def logout():
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    app.run()
+    app.run(debug=True)
