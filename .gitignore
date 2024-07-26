@@ -1,2 +1,3 @@
 instance/
 app_sql.py
+mydb.db
