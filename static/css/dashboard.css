@@ -6,8 +6,12 @@
     height: fit-content;
 }
 
-body{
+body {
     line-height: 1.25;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 /*--------------------------Style the navbar-----------------------------*/
