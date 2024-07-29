@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='assets/image/logo.jpg') }}" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/history.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='admin/css/current-user.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/header.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/footer.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/sidebar.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Current Users</title>
+</head>
+
+<body>
+    <header style="z-index: 10;">
+        <label for="toggle-bar" id="bar">
+            <i class="fa-solid fa-bars-staggered"></i>
+        </label>
+        <ul>
+            <li><a href="/admin/dashboard">Home</a></li>
+            <li><a href="/admin/current-users">Current Users</a></li>
+            <li><a href="/admin/user-results">User Results</a></li>
+        </ul>
+        <div class="profile">
+            <label for="user">
+                <i class="fas fa-user-circle"></i>
+            </label>
+        </div>
+        <input type="checkbox" name="" id="user">
+        <div class="profile-modal">
+            <ul>
+                <li>
+                    <a href="/admin/logout">
+                        <i class="fa fa-sign-out-alt"></i>
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </header>
+    <input style="display: none;" type="checkbox" name="" id="toggle-bar">
+    <div class="sidebar">
+        <div class="sidebar-content">
+            <ul>
+                <li><a href="/admin/dashboard">Home</a></li>
+                <li><a href="/admin/current-users">Current Users</a></li>
+                <li><a href="/admin/user-results">User Results</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="overlay"></div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1>All Users</h1>
+        <div class="button-container">
+            <button type="button" class="add-user-button" onclick="openModal(document.getElementById('addUserModal'))">
+                Add a New User
+            </button>
+        </div>
+        <div class="table-container">
+            <table id="statementTable">
+                <thead>
+                    <tr>
+                        <th scope="col">User ID</th>
+                        <th scope="col">User Name</th>
+                        <th scope="col">User Email</th>
+                        <th scope="col">User Password</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be added here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal(document.getElementById('confirmModal'))">
+                <i class="fa-solid fa-xmark"></i>
+            </span>
+            <h2>Are you sure you want to delete this user?</h2>
+            <form onsubmit="deleteUser(event)">
+                <div class="input-data">
+                    <input type="hidden" name="userId" id="userId">
+                </div>
+                <div style="display: flex; gap: 10px; padding: 20px; justify-content: center;">
+                    <button type="submit" class="btn btn-yes">
+                        Yes
+                    </button>
+                    <button type="button" id="cancelAdd" class="btn btn-no"
+                        onclick="closeModal(document.getElementById('confirmModal'))">
+                        No
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal(document.getElementById('editModal'))">
+                <i class="fa-solid fa-xmark"></i>
+            </span>
+            <h2>Edit User</h2>
+            <form onsubmit="editUser(event)">
+                <div class="input-data">
+                    <label for="editId">ID:</label>
+                    <input type="text" id="editId" required readonly>
+                </div>
+                <div class="input-data">
+                    <label for="editName">Name:</label>
+                    <input type="text" id="editName" required>
+                </div>
+                <div class="input-data">
+                    <label for="editEmail">Email:</label>
+                    <input type="email" id="editEmail" required>
+                </div>
+                <div class="input-data">
+                    <label for="editPassword">Password:</label>
+                    <input type="text" id="editPassword" required>
+                </div>
+                <div class="btn-container">
+                    <button type="submit" class="btn btn-yes">
+                        Edit User
+                        <i class="fa-regular fa-pen-to-square"></i>
+                    </button>
+                    <button type="button" id="cancelAdd" class="btn btn-no"
+                        onclick="closeModal(document.getElementById('editModal'))">
+                        Cancel
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add User Modal -->
+    <div id="addUserModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal(document.getElementById('addUserModal'))">
+                <i class="fa-solid fa-xmark"></i>
+            </span>
+            <h2>Add New User</h2>
+            <form onsubmit="addUser(event)">
+                <div class="input-data">
+                    <label for="userName">Name:</label>
+                    <input type="text" id="userName" required>
+                </div>
+                <div class="input-data">
+                    <label for="userEmail">Email:</label>
+                    <input type="email" id="userEmail" required>
+                </div>
+                <div class="input-data">
+                    <label for="userPassword">Password:</label>
+                    <input type="text" id="userPassword" required>
+                </div>
+                <div class="btn-container">
+                    <button type="submit" class="btn btn-yes">
+                        Add User
+                        <i class="fa-regular fa-pen-to-square"></i>
+                    </button>
+                    <button type="button" id="cancelAdd" class="btn btn-no"
+                        onclick="closeModal(document.getElementById('addUserModal'))">
+                        Cancel
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <footer>
+        &copy; 2024 Musaraf Hossain. All rights reserved.
+    </footer>
+    <script src="{{ url_for('static', filename='/admin/js/current-user.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
+</body>
+
+</html>

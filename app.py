@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect, jsonify
+from flask import Flask, render_template, request, session, redirect, jsonify, url_for
 from flask_sqlalchemy import SQLAlchemy
 import random
 import smtplib
@@ -67,7 +67,6 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-        print(email, password)
         user = User.query.filter_by(email=email).first()
         if user:
             if password==user.password:
@@ -81,6 +80,8 @@ def login():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    if 'user_id' in session:
+        return redirect('/')
     if request.method == 'POST':
         if not 'user_id' in session:
             name = request.form.get('name')
@@ -102,9 +103,6 @@ def logout():
 
 @app.route("/otp-verification", methods=['GET', 'POST'])
 def otp_verification():
-    if 'user_id' in session:
-        return redirect('/')
-
     if request.method == 'POST':
         if not 'user_id' in session:
             one = request.form.get('one')
@@ -138,6 +136,8 @@ def otp_verification():
 
 @app.route('/forgot-password', methods=['GET', 'POST'])
 def forgot_password():
+    if 'user_id' in session:
+        return redirect('/')
     if request.method == 'POST':
         if not 'user_id' in session:
             email = request.form.get('email')
@@ -145,7 +145,6 @@ def forgot_password():
             if not check_email_exists(email):
                 return render_template('forgot-password.html', message = 'User not exist. Sign up first.')
             otp = send_otp(email)
-            print(otp)
             session['email'], session['password'], session['otp'] = email, password, otp
             return redirect('/otp-verification')
         else:
@@ -154,10 +153,14 @@ def forgot_password():
 
 @app.route("/quiz")
 def quiz():
+    if 'user_id' not in session:
+        return redirect('/login')
     return render_template('quiz.html')
 
 @app.route("/history")
 def history():
+    if 'user_id' not in session:
+        return redirect('/login')
     return render_template('history.html')
 
 #------------------ API's ---------------------------#
@@ -187,6 +190,66 @@ def get_scores():
         'scores': [result.score_percentage for result in results]
     }
     return jsonify(data)
+
+@app.route('/get-all-scores')
+def get_all_scores():
+    results = QuizResult.query.filter_by().all()
+    data = {
+        'scores': [result.score_percentage for result in results]
+    }
+    return jsonify(data)
+
+@app.route('/get-all-users')
+def get_all_users():
+    users = User.query.all()
+    data = {
+            'users': [
+                {
+                    'id': user.id,
+                    'name': user.name,
+                    'email': user.email,
+                    'password': user.password
+                }
+                for user in users
+            ]
+        }
+    return jsonify(data)
+
+@app.route('/update-user/<int:user_id>', methods=['PUT'])
+def update_user(user_id):
+    user = User.query.get(user_id)
+    data = request.get_json()
+    user.name = data.get('name', user.name)
+    user.email = data.get('email', user.email)
+    user.password = data.get('password', user.password)
+    db.session.commit()
+    return jsonify({'message': 'User updated successfully'}), 200
+
+@app.route('/add-user', methods=['POST'])
+def add_user_api():
+    data = request.get_json()
+    name = data.get('name')
+    email = data.get('email')
+    password = data.get('password')
+    try:
+        add_user(name, email, password)
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': True, 'message': str(e)}), 500
+    return jsonify({'success': True, 'message': 'User added successfully'}), 201
+
+@app.route('/delete-user/<int:user_id>', methods=['DELETE'])
+def delete_user_api(user_id):
+    try:
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'error': True, 'message': 'User not found'}), 404
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify({'success': True, 'message': f'User with ID {user_id} deleted successfully'}), 200
+    except Exception as e:
+        db.session.rollback()  # Rollback in case of error
+        return jsonify({'error': True, 'message': str(e)}), 500
 #----------------- End API's -----------------------#
 
 #------------------ Helping Functions ---------------------------#
@@ -210,7 +273,6 @@ def send_otp(email):
         server.quit()
         return otp
     except Exception as e:
-        print(f"Error sending OTP: {e}")
         return None
 
 def add_user(name, email, password):
@@ -235,6 +297,46 @@ def add_result(data):
     db.session.add(new_result)
     db.session.commit()
 #------------------ End  Helping Functions ---------------------------#
+
+#------------------ Admin Routes ---------------------------#
+@app.route('/admin/login', methods=['GET', 'POST'])
+def admin_login():
+    if session.get('admin_logged_in'):
+        return redirect(url_for('admin_dashboard'))
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        if email == 'admin@example.com' and password == '12345678':
+            session['admin_logged_in'] = True
+            return redirect(url_for('admin_dashboard'))
+        else:
+            message = 'Email ID or password not matched.'
+            return render_template('admin/login.html', message=message)
+    return render_template('admin/login.html')
+
+@app.route('/admin/logout', methods=['GET'])
+def admin_logout():
+    session['admin_logged_in'] = False
+    return redirect(url_for('admin_login'))
+
+@app.route('/admin/dashboard')
+def admin_dashboard():
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin_login'))
+    users = User.query.all()
+    quizes = QuizResult.query.all()
+    data = {
+        'total_users': len(users),
+        'total_quizes': len(quizes),
+    }
+    return render_template('admin/dashboard.html', data=data)
+
+@app.route('/admin/current-users')
+def current_users():
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin_login'))
+    return render_template('admin/current-users.html')
+#------------------ End Admin Routes ---------------------------#
 
 if __name__=="__main__":
     with app.app_context():
