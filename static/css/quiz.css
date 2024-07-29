@@ -34,7 +34,7 @@
 
 @media only screen and (max-width: 768px){
     .container h2{
-        font-size: 34px;
+        font-size: 28px;
     }
 }
 
@@ -154,7 +154,6 @@
 .progress-container {
     position: relative;
     width: 200px;
-    height: 200px;
     margin-bottom: 20px;
 }
 
@@ -185,6 +184,22 @@ text {
     font-size: 2rem;
     fill: #333;
     font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .progress-circle {
+        width: 150px; /* Default size */
+        height: 150px;
+      }
+      
+    .progress-circle-bg,
+    .progress-circle-bar {
+        stroke-width: 7;
+    }
+
+    text {
+        font-size: 1.5rem;
+    }
 }
 
 #option-container {

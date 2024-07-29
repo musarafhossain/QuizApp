@@ -163,11 +163,13 @@ function startTimer() {
         clearInterval(timerInterval);
     }
     document.getElementById('progress-container').innerHTML = ``;
-    document.getElementById('progress-container').innerHTML = `<svg class="progress-circle" viewBox="0 0 100 100">
-                                                                    <circle class="progress-circle-bg" cx="50" cy="50" r="45"></circle>
-                                                                    <circle class="progress-circle-bar" cx="50" cy="50" r="45"></circle>
-                                                                    <text id="timer-text" x="50%" y="50%" text-anchor="middle" alignment-baseline="middle" transform="rotate(90, 50, 50)">${totalTime}</text>
-                                                                </svg>`;
+    document.getElementById('progress-container').innerHTML = `
+        <svg class="progress-circle" viewBox="0 0 100 100">
+            <circle class="progress-circle-bg" cx="50" cy="50" r="45"></circle>
+            <circle class="progress-circle-bar" cx="50" cy="50" r="45"></circle>
+            <text id="timer-text" x="50%" y="50%" text-anchor="middle" alignment-baseline="middle" transform="rotate(90, 50, 50)">${totalTime}</text>
+        </svg>
+    `;
     const timerText = document.getElementById('timer-text');
     const progressCircleBar = document.querySelector('.progress-circle-bar');
     timerInterval = setInterval(function() {

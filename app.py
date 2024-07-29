@@ -88,7 +88,7 @@ def signup():
             password = request.form.get('password')
             if check_email_exists(email):
                 return render_template('signup.html', message = 'User already exists. You can login or reset your password.')
-            otp = send_otp(otp, email)
+            otp = send_otp(email)
             session['name'], session['email'], session['password'], session['otp'] = name, email, password, otp
             return redirect('/otp-verification')
         else:
