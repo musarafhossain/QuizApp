@@ -6,8 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
    <title>OTP Verification Form</title>
+   <link rel="icon" href="{{ url_for('static', filename='assets/image/logo.jpg') }}" type="image/x-icon">
    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/otp.css') }}">
-    <!-- Boxicons CSS -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <script src="{{ url_for('static', filename='js/otp.js') }}" defer></script> 
   </head>
@@ -27,8 +27,8 @@
           <input type="number" disabled name="six"/>
         </div>
         <div>
-          {% if data %}
-            <p class="err-msg">{{ data }}</p>
+          {% if message %}
+            <p class="err-msg">{{ message }}</p>
           {% endif %}
         </div>
         <button>Verify OTP</button>

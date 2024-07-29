@@ -3,73 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='assets/image/logo.jpg') }}" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/quiz.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/header.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/footer.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/sidebar.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/loader.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Quiz</title>
 </head>
 <body>
-    <div class="container">
-        <h2>Select Questions</h2>
-        <div class="question-details">
-            <div class="input-q-num  q-input">
-                <label for="no-of-question">Enter Number of Question :</label>
-                <input type="number" name="no-of-question" id="no-of-question">
-            </div>
-            <div class="input-category q-input">
-                <label for="cars">Select Category :</label>
-                <select id="category" name="category">
-                <option value="9">General Knowledge</option>
-                <option value="10">Entertainment: Books</option>
-                <option value="11">Entertainment: Film</option>
-                <option value="12">Entertainment: Music</option>
-                <option value="13">Entertainment: Musicals & Theatres</option>
-                <option value="14">Entertainment: Television</option>
-                <option value="15">Entertainment: Video Games</option>
-                <option value="16">Entertainment: Board Games</option>
-                <option value="17">Science & Nature</option>
-                <option value="18">Science: Computers</option>
-                <option value="19">Science: Mathematics</option>
-                <option value="20">Mythology</option>
-                <option value="21">Sports</option>
-                <option value="22">Geography</option>
-                <option value="23">History</option>
-                <option value="24">Politics</option>
-                <option value="25">Art</option>
-                <option value="26">Celebrities</option>
-                <option value="27">Animals</option>
-                </select>
-            </div>
-            <div class="input-dificulty q-input">
-                <label for="cars">Select Difficulty: :</label>
-                <select id="difficulty" name="difficulty">
-                <option value="easy">Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Hard</option>
-                </select>
-            </div>
-            <button type="button" id="start-quiz-button">Start Quiz</button>
+    <header style="z-index: 10;">
+        <label for="toggle-bar" id="bar">
+            <i class="fa-solid fa-bars-staggered"></i>
+        </label>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/quiz">Start a New Quiz</a></li>
+            <li><a href="/history">History</a></li>
+            <li><a href="/about-me">About Me</a></li>
+            <li><a href="/contact-me">Contact Me</a></li>
+        </ul>
+        <div class="profile">
+            <label for="user">
+                <i class="fas fa-user-circle"></i>
+            </label>
+        </div>
+        <input type="checkbox" name="" id="user">
+        <div class="profile-modal">
+            <ul>
+                <li>
+                    <a href="/profile">
+                        <i class="fa fa-user"></i>
+                        Profile
+                    </a>
+                </li>
+                <hr>
+                <li>
+                    <a href="/logout">
+                        <i class="fa fa-sign-out-alt"></i>
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <input style="display: none;" type="checkbox" name="" id="toggle-bar">
+    <div class="sidebar">
+        <div class="sidebar-content">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/quiz">Start a New Quiz</a></li>
+                <li><a href="/history">History</a></li>
+                <li><a href="/">About Me</a></li>
+                <li><a href="/">Contact Me</a></li>
+            </ul>
         </div>
     </div>
-    <div class="quiz-container">
-        <h1>Quiz App</h1>
-        <div id="question-container">
-          <p id="question-text"></p>
-          <div id="answer-buttons"></div>
+    <div class="overlay"></div>
+
+    <div class="main-content">
+        <div class="container" id="input-container">
+            <h2>Select Questions</h2>
+            <div class="question-details">
+                <div class="input-q-num  q-input">
+                    <label for="no-of-question">Enter Number of Question :</label>
+                    <input type="number" name="no-of-question" id="no-of-question" min="1" max="10">
+                </div>
+                <div class="input-category q-input">
+                    <label for="cars">Select Category :</label>
+                    <select id="category" name="category">
+                        <option value="9">General Knowledge</option>
+                        <option value="10">Entertainment: Books</option>
+                        <option value="11">Entertainment: Film</option>
+                        <option value="12">Entertainment: Music</option>
+                        <option value="13">Entertainment: Musicals & Theatres</option>
+                        <option value="14">Entertainment: Television</option>
+                        <option value="15">Entertainment: Video Games</option>
+                        <option value="16">Entertainment: Board Games</option>
+                        <option value="17">Science & Nature</option>
+                        <option value="18">Science: Computers</option>
+                        <option value="19">Science: Mathematics</option>
+                        <option value="20">Mythology</option>
+                        <option value="21">Sports</option>
+                        <option value="22">Geography</option>
+                        <option value="23">History</option>
+                        <option value="24">Politics</option>
+                        <option value="25">Art</option>
+                        <option value="26">Celebrities</option>
+                        <option value="27">Animals</option>
+                    </select>
+                </div>
+                <div class="input-dificulty q-input">
+                    <label for="cars">Select Difficulty: :</label>
+                    <select id="difficulty" name="difficulty">
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                    </select>
+                </div>
+                <div class="button-container">
+                    <button type="button" id="start-quiz-button">Start Quiz</button>
+                </div>
+            </div>
         </div>
-        <div id="controls-container">
-          <button id="start-button">Start Quiz</button>
-          <div id="timer-container">
-            <span id="timer-text">Time Left: <span id="timer">0</span></span>
-            <span id="qus-done-txt">Questions Done: <span id="qus-no">0</span></span>
-          </div>
+
+        <div class="container hidden" id="start-container">
+            <h2>Best of Luck 🤞</h2>
+            <div id="controls-container">
+              <button id="start-button">
+                Start Quiz
+                <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+              <div id="details-container">
+                <span>Topic: <span id="topic-name">Topic</span></span>
+                <span>Total Question: <span id="qus-no">0</span></span>
+              </div>
+            </div>
+        </div>
+
+        <div class="container hidden" id="quiz-container">
+            <div class="progress-container" id="progress-container">
+                
+            </div>
+            <h2 id="qus-container"></h2>
+            <div id="option-container"></div>
+        </div>
+        
+        <div class="container hidden" id="result-container">
+            <h2>Quiz Completed!</h2>
+            <h3 id="result-msg"></h3>
+            <div>
+                <p>Your Score: <span id="result-score"></span> out of <span id="total-qus"></span></p>
+                <p>Score Percentage: <span id="result-percentage"></span>%</p>
+            </div>
+            <div class="btn-container">
+                <a href="/">Go Home</a>
+                <a href="/quiz">New Quiz</a>
+            </div>
         </div>
     </div>
 
-    <section class="modal hidden">
+    <section class="loader-modal hidden">
         <div class="modal-child">
             <div class="loader"></div>
         </div>
     </section>
-    <div class="overlay hidden"></div>
+    <div class="overlay-modal hidden"></div>
+
+    <footer>
+        &copy; 2024 Musaraf Hossain. All rights reserved.
+    </footer>
+    <script src="{{ url_for('static', filename='js/loader.js') }}"></script>
     <script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
 </body>
 </html>

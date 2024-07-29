@@ -1,1 +1,2 @@
 Run virtual environment : .venv\Scripts\activate     
+Install Packages : pip install -r requirements.txt

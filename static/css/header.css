@@ -1,0 +1,128 @@
+header{
+    display: flex;
+    justify-content: center;
+    height: 60px;
+    font-size: 1.1em;
+    color: #000;
+    font-weight: 600;
+    font-family: sans-serif;
+    position: relative;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, 
+                rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, 
+                rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+
+header #bar{
+    display: none;
+    height: fit-content;
+    padding: 5px;
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 768px){
+    header #bar{
+        display: block;
+    }
+}
+
+header #bar i{
+    font-size: 30px;
+}
+
+header ul{
+    display: flex;
+    list-style: none;
+    gap: 50px;
+    margin: auto;
+}
+
+@media only screen and (max-width: 768px){
+    header ul{
+        display: none;
+    }
+}
+
+header ul a{
+    text-decoration: none;
+    color: #000;
+}
+
+header ul a:hover{
+    text-decoration: underline;
+}
+
+header .profile{
+    height: 30px;
+    width: 30px;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+header .profile label i{
+    font-size: 30px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in;
+}
+
+header .profile label i:hover{
+    transform: scale(1.2);
+}
+
+header input{
+    display: none;
+}
+
+header .profile-modal {
+    opacity: 0;
+    visibility: hidden;
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, 
+                rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+    background-color: #FFFFFF;
+    position: absolute;
+    right: 10px;
+    top: 85%;
+    z-index: 3;
+    border-radius: 11px;
+    overflow: hidden;
+    transition: opacity 0.3s ease-in-out, 
+                visibility 0.3s ease-in-out;
+}
+
+header input:checked ~ .profile-modal {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+header .profile-modal ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-radius: 11px;
+}
+
+header .profile-modal ul li {
+    margin: 0;
+}
+
+header .profile-modal ul li a {
+    display: block;
+    padding: 10px 20px;
+    height: 100%;
+    width: 100%;
+    text-decoration: none;
+}
+
+header .profile-modal ul li a i{
+    margin-right: 10px;
+}
+
+header .profile-modal ul li a:hover {
+    background-color: skyblue;
+}

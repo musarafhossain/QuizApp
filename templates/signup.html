@@ -5,15 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{{ url_for('static', filename='assets/image/logo.jpg') }}" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/login.css') }}">
-    <title>Login</title>
+    <title>Sign Up</title>
 </head>
 <body>
     <div class="main">
         <img id="hero-img" src="{{ url_for('static', filename='assets/image/main.jpg') }}" alt="Image Load Failed">
         <div class="container">
-            <h1>Welcome Back</h1>
-            <h2>Login with your registered email</h2>
-            <form action="/login" method="post">
+            <h1>Welcome</h1>
+            <h2>Sign up with your email</h2>
+            <form action="/signup" method="post">
+                <div class="input-data">
+                    <label for="name">Name:</label>
+                    <input type="text" name="name" id="name" required>
+                </div>
                 <div class="input-data">
                     <label for="email">Email:</label>
                     <input type="email" name="email" id="email" required>
@@ -31,14 +35,13 @@
                     </div>
                 </div>
                 <div class="oth-action">
-                    <p><span>Don't Have an Account?</span> <a href="/signup">Sign Up</a></p>
-                    <p><a href="/forgot-password">Forgot Password</a></p>
+                    <p><span>Already Have an Account?</span> <a href="/login">Login</a></p>
                 </div>
                 {% if message %}
                     <p class="err-msg">{{ message }}</p>
                 {% endif %}
                 <div class="button-container">
-                    <button type="submit">Login</button>
+                    <button type="submit">Sign Up</button>
                 </div>
             </form>
         </div>

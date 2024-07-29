@@ -4,13 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{{ url_for('static', filename='assets/image/logo.jpg') }}" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/history.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/header.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/footer.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/sidebar.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <title>Home</title>
+    <title>History</title>
 </head>
 <body>
     <header style="z-index: 10;">
@@ -64,57 +63,29 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        <h1>Hello, {{name}}</h1>
-        <div class="figures">
-            <div class="figure" style="background-color: lightcoral;">
-                <div>
-                    <i class="fa-solid fa-star"></i>
-                    <p>{{score.overall_score}}/{{score.total_score}}</p>
-                </div>
-                <p>Your Overall Srore</p>
-            </div>
-            <div class="figure" style="background-color: lightgreen;">
-                <div>
-                    <i class="fa-solid fa-globe"></i>
-                    <p>{{score.total_quizes}}</p>
-                </div>
-                <p>Total Quizes</p>
-            </div>
-            <div class="figure" style="background-color: lightpink;">
-                <div>
-                    <i class="fa-solid fa-circle-check"></i>
-                    <p>{{score.total_passed}}</p>
-                </div>
-                <p>Passed Quizes</p>
-            </div>
-            <div class="figure" style="background-color: lightseagreen;">
-                <div>
-                    <i class="fa-solid fa-coins"></i>
-                    <p>{{score.total_moderate}}</p>
-                </div>
-                <p>Moderate Quizes</p>
-            </div>
-            <div class="figure" style="background-color: lightsalmon;">
-                <div>
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                    <p>{{score.total_failed}}</p>
-                </div>
-                <p>Failed Quizes</p>
-            </div>
-        </div>
-        <div class="chart-box">
-            <div class="large-column">
-                <div class="container" id="con">
-                    <canvas id="myChart"></canvas>
-                </div>
-            </div>
+        <h1>History</h1>
+        <div class="table-container">
+            <table id="statementTable">
+                <thead>
+                    <tr>
+                        <th scope="col">Topic</th>
+                        <th scope="col">Your Score</th>
+                        <th scope="col">Total Marks</th>
+                        <th scope="col">Total Questions</th>
+                        <th scope="col">Date and Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <!-- Rows will be added here by JavaScript -->
+                </tbody>
+            </table>
         </div>
     </div>
 
     <footer>
         &copy; 2024 Musaraf Hossain. All rights reserved.
     </footer>
-    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/history.js') }}"></script>
     <script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
 </body>
 </html>

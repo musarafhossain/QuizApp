@@ -1,33 +1,23 @@
-var quizQuestions = [];
+let quizQuestions = [];
+const startQuizBtn = document.getElementById('start-quiz-button');
+const startBtn = document.getElementById('start-button');
+let currentQuestionIndex = 0;
+let score = 0;
+let totalTime = 30; 
+let timeLeft = totalTime;
+let timerInterval;
+let currentOpt=[];
 let topic;
-const modal = document.querySelector(".modal");
-const overlay = document.querySelector(".overlay");
-// Get the button element
-const startBtn = document.getElementById('start-quiz-button');
 
-// Add event listener to the button
-startBtn.addEventListener('click', async function () {
-    openModal();
-    // Get input values
+startQuizBtn.addEventListener('click', async function () {
     const numberOfQuestions = document.getElementById('no-of-question').value;
     const category = document.getElementById('category').value;
-    topic = category
+    topic = category;
     const difficulty = document.getElementById('difficulty').value;
 
-    // Check if inputs are not empty
     if (numberOfQuestions.trim() !== '' && category.trim() !== '' && difficulty.trim() !== '') {
-        // Inputs are not empty, proceed with logic
-        console.log('Number of Questions:', numberOfQuestions);
-        console.log('Category:', category);
-        console.log('Difficulty:', difficulty);
-        
-        // Disable the button after successful validation
-        //this.disabled = true;
-            // Construct the API URL with query parameters
-        let apiUrl = `https://opentdb.com/api.php?amount=${numberOfQuestions}&category=${category}&difficulty=${difficulty}&type=multiple`
-
-        console.log(apiUrl)
-
+        openModal();
+        let apiUrl = `https://opentdb.com/api.php?amount=${numberOfQuestions}&category=${category}&difficulty=${difficulty}&type=multiple`;
         try {
             const response = await fetch(apiUrl);
             if (!response.ok) {
@@ -35,177 +25,205 @@ startBtn.addEventListener('click', async function () {
             }
             const data = await response.json();
             const questionsData = data.results;
-            
-            // Translate and display the questions and choices
-            for (const [index, questionData] of questionsData.entries()) {
-              const question = questionData.question;
-              const choices = [...questionData.incorrect_answers, questionData.correct_answer];
-              choices.sort(() => Math.random() - 0.5);
-              let data1 = {
-                question: question,
-                options: choices,
-                correctAnswer: questionData.correct_answer,
-              }
-              quizQuestions.push(data1)
-            }
-          } catch (error) {
+            quizQuestions = [];
+            questionsData.forEach(question => {
+                const ques = question.question;
+                const options = question.incorrect_answers;
+                options.push(question.correct_answer);
+                shuffleArray(options); // Shuffle the options array
+                const qus = {
+                    question: ques,
+                    options: options,
+                    correctAnswer: question.correct_answer,
+                }
+                quizQuestions.push(qus)
+            })
+            document.getElementById('input-container').style.display = 'none';
+            document.getElementById('start-container').style.display = 'block';
+            document.getElementById('topic-name').innerText = getCategoryString(category);
+            document.getElementById('qus-no').innerText = numberOfQuestions;
+        }catch (error) {
             console.error('Failed to fetch quiz questions:', error);
-          }
-          document.querySelector('.container').style.display = 'none';
-          document.querySelector('.quiz-container').style.display = 'block';
+        }
+        closeModal()
     } else {
-        // Inputs are empty, show error message or take appropriate action
         alert('Please fill in all fields.');
     }
-    closeModal();
 });
 
-  
-  // Variables to track quiz state
-  let currentQuestionIndex = 0;
-  let score = 0;
-  let timeLeft = 31;
-  let timerInterval;
-  
-  // Function to start the quiz
-  function startQuiz() {
-    // Hide the start button and display the first question
-    document.getElementById("start-button").style.display = "none";
+startBtn.addEventListener('click', async function () {
+    document.getElementById('start-container').style.display = 'none';
+    document.getElementById('quiz-container').style.display = 'flex';
     displayQuestion();
     startTimer();
-  }
-  
-  // Function to display a question and its options
-  function displayQuestion() {
+});
+
+function displayQuestion() {
     const currentQuestion = quizQuestions[currentQuestionIndex];
-    const questionText = document.getElementById("question-text");
-    const answerButtons = document.getElementById("answer-buttons");
+    const qusContainer = document.getElementById('qus-container')
+    const optContainer = document.getElementById("option-container");
   
-    // Clear previous question and answer options
-    questionText.innerHTML = "";
-    answerButtons.innerHTML = "";
+    qusContainer.innerHTML = "";
+    optContainer.innerHTML = "";
   
-    // Display the current question
-    questionText.innerHTML = currentQuestion.question;
-    // Update the timer text
-    document.getElementById("qus-no").textContent = `${currentQuestionIndex}/${quizQuestions.length}`;
-  
-    // Create answer buttons for each option
+    qusContainer.innerHTML = currentQuestion.question;
+    currentOpt = [];
     currentQuestion.options.forEach(option => {
       const button = document.createElement("button");
       button.innerText = option;
-      button.classList.add("answer-button");
-      answerButtons.appendChild(button);
-  
-      // Add click event listener to check the answer
+      button.classList.add("option-button");
+      optContainer.appendChild(button);
+      currentOpt.push(button);
       button.addEventListener("click", function() {
-        checkAnswer(option);
+        checkAnswer(option, button);
       });
     });
-  }
-  
-  // Function to check the selected answer
-  function checkAnswer(selectedOption) {
+}
+
+function checkAnswer(selectedOption, opt_btn) {
     const currentQuestion = quizQuestions[currentQuestionIndex];
-  
-    // Check if the selected answer is correct
+
     if (selectedOption === currentQuestion.correctAnswer) {
-      score++;
-    }
-  
-    // Move to the next question or end the quiz if all questions are answered
-    currentQuestionIndex++;
-  
-    if (currentQuestionIndex < quizQuestions.length) {
-        timeLeft = 30;
-      displayQuestion();
+        score++;
+        opt_btn.style.backgroundColor = '#399918'; 
     } else {
-      endQuiz();
+        if(opt_btn)
+            opt_btn.style.backgroundColor = '#FF0000';
     }
-  }
-  
-  // Function to start the timer
-  function startTimer() {
-    timerInterval = setInterval(function() {
-      timeLeft--;
-  
-      // Update the timer text
-      document.getElementById("timer").textContent = timeLeft;
-  
-      // End the quiz if time runs out
-      if (timeLeft <= 0) {
-        //endQuiz();
-        checkAnswer('');
-      }
-    }, 1000);
-  }
-  
-  // Function to end the quiz
+    currentOpt.forEach(opt => {
+        if(opt.innerText===currentQuestion.correctAnswer){
+            opt.style.backgroundColor = '#399918';
+        }
+    });
+    if(opt_btn===0){
+        currentOpt.forEach(opt => {
+            if(opt.innerText===currentQuestion.correctAnswer){
+                opt.style.backgroundColor = '#399918'; 
+            }else{
+                opt.style.backgroundColor = '#FF0000';
+            }
+        })
+    }
+    setTimeout(() => {
+        currentQuestionIndex+=1;
+        if (currentQuestionIndex < quizQuestions.length) {
+            timeLeft = totalTime;
+            displayQuestion();
+            startTimer();
+        } else {
+            endQuiz();
+        }
+    }, 1000); 
+}
+
 function endQuiz() {
-    // Stop the timer
+    let message;
     clearInterval(timerInterval);
-    document.getElementById("qus-no").textContent = `${currentQuestionIndex}/${quizQuestions.length}`;
-    // Calculate the score percentage
+    document.getElementById('quiz-container').style.display = 'none';
+    document.getElementById('result-container').style.display = 'flex';
     const scorePercentage = ((score / quizQuestions.length) * 100).toFixed(2);
-  
-    // Display the final score
-    const questionContainer = document.getElementById("question-container");
-    questionContainer.innerHTML = `
-      <h2 style="margin-top:30px; margin-bottom:20px;">Quiz Completed!</h2>
-      <p>Your Score: ${score} out of ${quizQuestions.length}</p>
-      <p>Score Percentage: ${scorePercentage}%</p>
-      <div style="width:100%; display:flex; align-items:center; justify-content:center;">
-        <a style="width: 120px;
-                height: 40px;
-                border-radius: 7px;
-                display: block;
-                color: white;
-                text-align: center;
-                padding: 14px 20px;
-                text-decoration: none;
-                font-family: sans-serif;
-                background: -webkit-linear-gradient(right,#004489,#004f9e,#0059b3, #0073e6);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin-top: 25px;" href="/">Go Home</a>
-      </div>
-    `;
-  
+    if(scorePercentage>=60&&scorePercentage<=100){
+        message = 'Congratulation! 🤩 You have passed';
+    }else if(scorePercentage>=30&&scorePercentage<60){
+        message = 'Good! 👏';
+    }else if(scorePercentage>=0&&scorePercentage<30){
+        message = 'Keep learning! 😑';
+    }else{
+        message = 'Invalid Result! ❎';
+    }
+    document.getElementById('result-score').innerHTML = score;
+    document.getElementById('total-qus').innerHTML = quizQuestions.length;
+    document.getElementById('result-percentage').innerHTML = scorePercentage;
+    document.getElementById('result-msg').innerHTML = message;
+
     // Send quiz result to the backend
     fetch('/submit_result', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        score: score,
-        total_questions: quizQuestions.length,
-        score_percentage: scorePercentage,
-        topic: topic,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          score: score,
+          total_questions: quizQuestions.length,
+          score_percentage: scorePercentage,
+          topic: topic,
+        })
       })
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data.message);
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
-  }
-  
-  
-// Add event listener to start the quiz when the start button is clicked
-document.getElementById("start-button").addEventListener("click", startQuiz);
+      .then(response => response.json())
+      .then(data => {
+        console.log(data.message);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+}
 
-const openModal = function () {
-  modal.classList.remove("hidden");
-  overlay.classList.remove("hidden");
+function startTimer() {
+    if (timerInterval) {
+        clearInterval(timerInterval);
+    }
+    document.getElementById('progress-container').innerHTML = ``;
+    document.getElementById('progress-container').innerHTML = `<svg class="progress-circle" viewBox="0 0 100 100">
+                                                                    <circle class="progress-circle-bg" cx="50" cy="50" r="45"></circle>
+                                                                    <circle class="progress-circle-bar" cx="50" cy="50" r="45"></circle>
+                                                                    <text id="timer-text" x="50%" y="50%" text-anchor="middle" alignment-baseline="middle" transform="rotate(90, 50, 50)">${totalTime}</text>
+                                                                </svg>`;
+    const timerText = document.getElementById('timer-text');
+    const progressCircleBar = document.querySelector('.progress-circle-bar');
+    timerInterval = setInterval(function() {
+        timeLeft--;
+        timerText.textContent = timeLeft;
+        const radius = parseFloat(progressCircleBar.getAttribute('r'));
+        const circumference = 2 * Math.PI * radius;
+        const offset = circumference * (1 - (timeLeft / totalTime));
+        progressCircleBar.style.strokeDasharray = `${circumference}px ${circumference}px`;
+        progressCircleBar.style.strokeDashoffset = offset;
+
+        // Change color based on time left
+        if (timeLeft <= totalTime / 3) {
+            progressCircleBar.style.stroke = 'red'; 
+        } else if (timeLeft <= (2 * totalTime) / 3) {
+            progressCircleBar.style.stroke = 'orange'; 
+        }
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            checkAnswer('', 0);
+        }
+    }, 1000);
+}
+
+const categoryMapping = {
+    "9": "General Knowledge",
+    "10": "Entertainment: Books",
+    "11": "Entertainment: Film",
+    "12": "Entertainment: Music",
+    "13": "Entertainment: Musicals & Theatres",
+    "14": "Entertainment: Television",
+    "15": "Entertainment: Video Games",
+    "16": "Entertainment: Board Games",
+    "17": "Science & Nature",
+    "18": "Science: Computers",
+    "19": "Science: Mathematics",
+    "20": "Mythology",
+    "21": "Sports",
+    "22": "Geography",
+    "23": "History",
+    "24": "Politics",
+    "25": "Art",
+    "26": "Celebrities",
+    "27": "Animals"
 };
 
-const closeModal = function () {
-  modal.classList.add("hidden");
-  overlay.classList.add("hidden");
-};
+function getCategoryString(value) {
+    return categoryMapping[value] || "Unknown Category";
+}
 
-//overlay.addEventListener("click", closeModal);
+// Function to shuffle an array
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}

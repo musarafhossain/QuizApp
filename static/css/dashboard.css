@@ -1,375 +1,91 @@
 *{
     box-sizing: border-box;
     margin: 0;
+    padding: 0;
     user-select: none;
-    font-family: sans-serif;
-    height: fit-content;
 }
 
-body {
-    line-height: 1.25;
-    height: 100vh;
+.main-content{
+    margin: 30px;
+}
+
+h1 {
+    text-align: left;
+    color: #333;
+    font-family: Verdana;
+    font-weight: 400;
+}
+
+.main-content .figures {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px; 
+    width: 100%;
+    padding: 20px 0;
+    box-sizing: border-box; 
+}
+
+.main-content .figures .figure {
+    font-family: 'Gill Sans MT';
+    height: fit-content;
+    padding: 10px 20px;
     display: flex;
     flex-direction: column;
+    gap: 15px; 
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, 
+                rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.main-content .figures .figure:hover {
+    transform: translateY(-5px);
+    box-shadow: rgba(60, 64, 67, 0.4) 0px 4px 8px 0px, 
+                rgba(60, 64, 67, 0.2) 0px 8px 16px 2px; 
+}
+
+.main-content .figures .figure div {
+    display: flex;
     justify-content: space-between;
-}
-
-/*--------------------------Style the navbar-----------------------------*/
-.navbar {
-    overflow: hidden;
-    background-color: #000;
-    display: flex;
     align-items: center;
-    justify-content: space-between;
-    height: 50px;
-}
-
-.navigate{
-    display: flex;
-    margin-left: 10px;
-    gap: 10px;
-
-}
-
-.navbar a {
-    width: 130px;
-    height: 40px;
-    border-radius: 7px;
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 14px 20px;
-    text-decoration: none;
-    font-family: sans-serif;
-    background: -webkit-linear-gradient(right,#004489,#004f9e,#0059b3, #0073e6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.navbar a:hover {
-    background: #0180ff;
-}
-
-.navbar a.right {
-    background: -webkit-linear-gradient(right,#880000,#9d0000,#b30000, #e60000);
-    margin: 5px;
-    border-radius: 7px;
-    width: 120px;
-    height: 40px;
-    font-size: 18px;
-    padding: 7px;
-    font-family: sans-serif;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.navbar a.right:hover {
-    background: #ff1a1a;
-}
-
-#openSidebarMenu, #sidebarMenu{
-    display: none;
-}
-/*-------------------------- End style the navbar-----------------------------*/
-
-/*--------------------------Style the new quiz button-----------------------------*/
-.new-quiz-button{
     width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 3%;
 }
 
-.quiz-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-decoration: none;
-    height: 50px;
-    width: 250px;
-    background-color: rgb(9, 124, 9);
-    color: #fff;
-    font-size: 22px;
-    font-family: sans-serif;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
+.main-content .figures .figure div i {
+    font-size: 30px;
+    color: #333; 
 }
 
-.quiz-button:hover {
-    transform: scale(1.05);
+.main-content .figures .figure div p {
+    font-size: 36px;
+    margin: 0;
+    color: #333; 
 }
-/*-------------------------- End style the new quiz button-----------------------------*/
 
-/*--------------------------Style the details section-----------------------------*/
-.details-section {
-    display: flex;
-    height: fit-content;
-    margin: 2% 2%;
-    gap: 1%;
-    justify-content: center;
-    height: 450px;
-    align-items: flex-end;
+.main-content .figures .figure p {
+    font-size: 24px;
+    color: #555; 
 }
-/*--------------------------Style the graph-----------------------------*/
-.chart-container {
-    width: 95%;
-    margin: auto;
-    margin-top: 5%;
-    padding: 20px;
-    max-width: 800px;
-    position: relative;
+
+.chart-box {
+    width: 100%;
+    padding: 2% 1%;
+    border-radius: 12px;
+    margin: 2% 0;
+    box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset,
+                 rgb(204, 219, 232) -3px -3px 6px 0px inset,
+                rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
 }
 
 .container{
     min-width: 100%;
 }
 
-.details-section .chart-box {
-    width: 50%;
-}
-
 .large-column {
-    overflow-x: scroll;
+    overflow: auto;
 }
 
 canvas{
     height: 360px;
 }
-/*--------------------------End style the graph-----------------------------*/
-/*--------------------------Style the table-----------------------------*/
-.details-section .table-container{
-    width: 50%;
-    overflow: scroll;
-    height: 100%;
-    overflow-x: hidden;
-}
 
-table {
-    border: 1px solid #ccc;
-    border-collapse: collapse;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    table-layout: fixed;
-}
-
-table caption {
-    font-size: 1.5em;
-    margin: .5em 0 .75em;
-}
-
-table tr {
-    background-color: #f8f8f8;
-    border: 1px solid #ddd;
-    padding: .35em;
-}
-
-table th,
-table td {
-    padding: .625em;
-    text-align: center;
-}
-
-table th {
-    font-size: .85em;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-}
-/*-------------------------- End Style the table-----------------------------*/
-/*--------------------------Style the details section-----------------------------*/
-
-/*--------------------------Style the footer-----------------------------*/
-footer {
-    background-color: #f2f2f2;
-    text-align: center;
-    padding: 10px 0;
-    width: 100%;
-}
-/*--------------------------End style the footer-----------------------------*/
-
-/* Styles for mobile devices */
-@media only screen and (max-width: 768px) {
-    .navigate{
-        display: none;
-    }
-
-    #openSidebarMenu, #sidebarMenu{
-        display: block;
-    }
-
-    .new-quiz-button{
-        margin-top: 70px;
-    }
-
-    .header {
-        width: 100%;
-        background-color: #000;
-        position: fixed;
-        height: 60px!important;
-        justify-content: end;
-    }
-    #sidebarMenu {
-        height: 100%;
-        position: fixed;
-        left: 0;
-        top: 0;
-        width: 250px;
-        margin-top: 60px;
-        transform: translateX(-250px);
-        transition: transform 250ms ease-in-out;
-        background: linear-gradient(180deg, #FC466B 0%, #3F5EFB 100%);
-        z-index: 1;
-    }
-    .sidebarMenuInner{
-        margin:0;
-        padding:0;
-        border-top: 1px solid rgba(255, 255, 255, 0.10);
-    }
-    .sidebarMenuInner li{
-        list-style: none;
-        color: #fff;
-        text-transform: uppercase;
-        font-weight: bold;
-        padding: 20px;
-        cursor: pointer;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.10);
-    }
-    .sidebarMenuInner li a{
-        color: #fff;
-        text-transform: uppercase;
-        font-weight: bold;
-        cursor: pointer;
-        text-decoration: none;
-    }
-    input[type="checkbox"]:checked ~ #sidebarMenu {
-        transform: translateX(0);
-    }
-
-    input[type=checkbox] {
-        transition: all 0.3s;
-        box-sizing: border-box;
-        display: none;
-    }
-    .sidebarIconToggle {
-        transition: all 0.3s;
-        box-sizing: border-box;
-        cursor: pointer;
-        position: absolute;
-        z-index: 99;
-        height: 100%;
-        width: 100%;
-        top: 22px;
-        left: 15px;
-        height: 22px;
-        width: 22px;
-    }
-    .spinner {
-        transition: all 0.3s;
-        box-sizing: border-box;
-        position: absolute;
-        height: 3px;
-        width: 100%;
-        background-color: #fff;
-    }
-    .horizontal {
-        transition: all 0.3s;
-        box-sizing: border-box;
-        position: relative;
-        float: left;
-        margin-top: 3px;
-    }
-    .diagonal.part-1 {
-        position: relative;
-        transition: all 0.3s;
-        box-sizing: border-box;
-        float: left;
-    }
-    .diagonal.part-2 {
-        transition: all 0.3s;
-        box-sizing: border-box;
-        position: relative;
-        float: left;
-        margin-top: 3px;
-    }
-    input[type=checkbox]:checked ~ .sidebarIconToggle > .horizontal {
-        transition: all 0.3s;
-        box-sizing: border-box;
-        opacity: 0;
-    }
-    input[type=checkbox]:checked ~ .sidebarIconToggle > .diagonal.part-1 {
-        transition: all 0.3s;
-        box-sizing: border-box;
-        transform: rotate(135deg);
-        margin-top: 8px;
-    }
-    input[type=checkbox]:checked ~ .sidebarIconToggle > .diagonal.part-2 {
-        transition: all 0.3s;
-        box-sizing: border-box;
-        transform: rotate(-135deg);
-        margin-top: -9px;
-    }
-
-    .details-section{
-        display: block;
-        height: fit-content;
-    }
-
-    .details-section .chart-box {
-        width: 100%;
-    }
-
-    .details-section .table-container{
-        width: 100%;
-        margin-top: 5%;
-        height: 450px;
-    }
-
-    table {
-        border: 0;
-    }
-
-    table caption {
-        font-size: 1.3em;
-    }
-
-    table thead {
-        border: none;
-        clip: rect(0 0 0 0);
-        height: 1px;
-        margin: -1px;
-        overflow: hidden;
-        padding: 0;
-        position: absolute;
-        width: 1px;
-    }
-
-    table tr {
-        border-bottom: 3px solid #ddd;
-        display: block;
-        margin-bottom: .625em;
-    }
-
-    table td {
-        border-bottom: 1px solid #ddd;
-        display: block;
-        font-size: .8em;
-        text-align: right;
-    }
-
-    table td::before {
-        content: attr(data-label);
-        float: left;
-        font-weight: bold;
-        text-transform: uppercase;
-    }
-
-    table td:last-child {
-        border-bottom: 0;
-    }
-}
-/* End Styles for mobile devices */
