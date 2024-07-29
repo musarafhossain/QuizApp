@@ -102,8 +102,6 @@ def logout():
 
 @app.route("/otp-verification", methods=['GET', 'POST'])
 def otp_verification():
-    if 'user_id' not in session:
-        return redirect('/login')
     if 'user_id' in session:
         return redirect('/')
 
@@ -156,14 +154,10 @@ def forgot_password():
 
 @app.route("/quiz")
 def quiz():
-    if 'user_id' not in session:
-        return redirect('/login')
     return render_template('quiz.html')
 
 @app.route("/history")
 def history():
-    if 'user_id' not in session:
-        return redirect('/login')
     return render_template('history.html')
 
 #------------------ API's ---------------------------#
