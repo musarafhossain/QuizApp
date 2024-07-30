@@ -169,7 +169,15 @@ def submit_result():
     if 'user_id' not in session:
         return redirect('/login')
     data = request.json
-    add_result(data)
+    result = {
+        'user_id': session['user_id'],
+        'topic': data['topic'],
+        'score': data['score'],
+        'total_questions': data['total_questions'],
+        'score_percentage': data['score_percentage'],
+        'timestamp': datetime.utcnow()
+    }
+    add_result(result)
     return jsonify({'message': 'Result saved successfully!'})
 
 @app.route('/get-data')
@@ -216,7 +224,7 @@ def get_all_users():
     return jsonify(data)
 
 @app.route('/update-user/<int:user_id>', methods=['PUT'])
-def update_user(user_id):
+def update_user_api(user_id):
     user = User.query.get(user_id)
     data = request.get_json()
     user.name = data.get('name', user.name)
@@ -253,6 +261,89 @@ def delete_user_api(user_id):
     except Exception as e:
         db.session.rollback()  # Rollback in case of error
         return jsonify({'error': True, 'message': str(e)}), 500
+
+@app.route('/get-all-results')
+def get_all_results():
+    results = QuizResult.query.all()
+    data = {
+            'results': [
+                {
+                    'id': result.id,
+                    'user_id': result.user_id,
+                    'score': result.score,
+                    'total_questions': result.total_questions,
+                    'score_percentage': result.score_percentage,
+                    'topic': result.topic,
+                    'timestamp': result.timestamp,
+                }
+                for result in results
+            ]
+        }
+    return jsonify(data)
+
+@app.route('/add-result', methods=['POST'])
+def add_result_api():
+    data = request.json
+    user_id = data.get('user_id')
+    score = data.get('score')
+    total_questions = data.get('total_questions')
+    score_percentage = data.get('score_percentage')
+    topic = data.get('topic')
+    timestamp_str = data.get('timestamp')
+    try:
+        timestamp = datetime.strptime(timestamp_str, '%Y-%m-%dT%H:%M')
+    except ValueError:
+        return jsonify({'success': False, 'error': 'Invalid timestamp format'})
+    result = {
+        'user_id': user_id,
+        'topic': topic,
+        'score': score,
+        'total_questions': total_questions,
+        'score_percentage': score_percentage,
+        'timestamp': timestamp
+    }
+    try:
+        add_result(result)
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': True, 'message': str(e)}), 500
+    return jsonify({'success': True, 'message': 'User added successfully'}), 201
+
+@app.route('/delete-result/<int:result_id>', methods=['DELETE'])
+def delete_result_api(result_id):
+    try:
+        result = QuizResult.query.get(result_id)
+        if not result:
+            return jsonify({'error': True, 'message': 'result not found'}), 404
+        db.session.delete(result)
+        db.session.commit()
+        return jsonify({'success': True, 'message': f'Result with ID {result_id} deleted successfully'}), 200
+    except Exception as e:
+        db.session.rollback()  # Rollback in case of error
+        return jsonify({'error': True, 'message': str(e)}), 500
+    
+@app.route('/update-result/<int:id>', methods=['PUT'])
+def update_result_api(id):
+    result = QuizResult.query.get(id)
+    data = request.get_json()
+    user_id = data.get('user_id')
+    score = data.get('score')
+    total_questions = data.get('total_questions')
+    score_percentage = data.get('score_percentage')
+    topic = data.get('topic')
+    timestamp_str = data.get('timestamp')
+    try:
+        timestamp = datetime.strptime(timestamp_str, '%Y-%m-%dT%H:%M')
+    except ValueError:
+        return jsonify({'success': False, 'error': 'Invalid timestamp format'})
+    result.user_id = user_id
+    result.score = score
+    result.topic = topic
+    result.total_questions = total_questions
+    result.score_percentage = score_percentage
+    result.timestamp = timestamp
+    db.session.commit()
+    return jsonify({'message': 'Result updated successfully'}), 200
 #----------------- End API's -----------------------#
 
 #------------------ Helping Functions ---------------------------#
@@ -290,12 +381,12 @@ def update_password(existing_user, password):
 
 def add_result(data):
     new_result = QuizResult(
-        user_id=session['user_id'],
+        user_id=data['user_id'],
         topic=data['topic'],
         score=data['score'],
         total_questions=data['total_questions'],
         score_percentage=data['score_percentage'],
-        timestamp=datetime.utcnow(),
+        timestamp=data['timestamp'],
     )
     db.session.add(new_result)
     db.session.commit()
@@ -339,6 +430,12 @@ def current_users():
     if not session.get('admin_logged_in'):
         return redirect(url_for('admin_login'))
     return render_template('admin/current-users.html')
+
+@app.route('/admin/user-results')
+def user_results():
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin_login'))
+    return render_template('admin/user-results.html')
 #------------------ End Admin Routes ---------------------------#
 
 if __name__=="__main__":

@@ -10,28 +10,22 @@ td {
 
 .add-user-button {
     padding: 8px 16px;
-    /* Vertical | Horizontal */
     background-color: #007BFF;
-    /* Bootstrap blue color */
     color: white;
     border: none;
     border-radius: 4px;
-    /* Rounded corners */
     cursor: pointer;
     font-size: 16px;
-    /* Adjust as needed */
     transition: background-color 0.3s, box-shadow 0.3s;
 }
 
 .add-user-button:hover {
     background-color: #0056b3;
-    /* Darker blue on hover */
 }
 
 .add-user-button:focus {
     outline: none;
     box-shadow: 0 0 0 2px rgba(38, 143, 255, 0.5);
-    /* Light blue ring around the button */
 }
 
 .actionCell {
@@ -155,7 +149,7 @@ td {
     font-family: monospace;
 }
 
-.modal-content form .input-data input {
+.modal-content form .input-data input, .modal-content form .input-data select {
     padding: 10px;
     width: 100%;
     font-size: 18px;
@@ -165,7 +159,7 @@ td {
     color: #666;
 }
 
-.modal-content form .input-data input:focus {
+.modal-content form .input-data input:focus, .modal-content form .input-data select:focus {
     outline: none;
     outline: 3px solid skyblue;
 }
@@ -188,3 +182,64 @@ td {
 }
 
 /*=============== End Modal CSS Here ==============*/
+
+@media only screen and (max-width: 1024px) {
+    .main-content .table-container{
+        width: 100%;
+        margin-top: 5%;
+        
+    }
+
+    table {
+        border: 0;
+        font-size: 16px;
+    }
+
+    table caption {
+        font-size: 1.3em;
+    }
+
+    table thead {
+        border: none;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+
+    table tr {
+        border-bottom: 3px solid #ddd;
+        display: block;
+        margin-bottom: .625em;
+    }
+
+    table td {
+        border-bottom: 1px solid #ddd;
+        display: block;
+        font-size: .8em;
+        text-align: right;
+    }
+
+    table td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    table th,
+    table td {
+        padding: 7px;
+    }
+
+    table td:last-child {
+        border-bottom: 0;
+    }
+    
+    table tr:last-child {
+        margin-bottom: 0;
+    }
+}
