@@ -244,6 +244,9 @@ def delete_user_api(user_id):
         user = User.query.get(user_id)
         if not user:
             return jsonify({'error': True, 'message': 'User not found'}), 404
+        results = QuizResult.query.filter_by(user_id=user_id).all()
+        for result in results:
+            db.session.delete(result)
         db.session.delete(user)
         db.session.commit()
         return jsonify({'success': True, 'message': f'User with ID {user_id} deleted successfully'}), 200
