@@ -58,8 +58,9 @@ function addDataToTable(data) {
         topicCell.setAttribute("data-label", "Topic");
         row.appendChild(topicCell);
 
+        const dt = data[i].timestamp;
         const timeCell = document.createElement("td");
-        timeCell.textContent = new Date(data[i].timestamp).toLocaleString()
+        timeCell.textContent = formatDateForOutput(dt)
         timeCell.setAttribute("data-label", "Date Time");
         row.appendChild(timeCell);
 
@@ -204,14 +205,14 @@ function updatePercentage(inputElement) {
 }
 
 function setDefaultDateTime() {
-    const datetimeLocalValue = formatDateForInput(new Date());
+    const datetimeLocalValue = formatCurrentDateForInput(new Date());
     const dateTimeInput = document.querySelector('#addResultModal #dateTime');
     if (dateTimeInput) {
         dateTimeInput.value = datetimeLocalValue;
     }
 }
 
-function formatDateForInput(dateString) {
+function formatCurrentDateForInput(dateString) {
     const date = new Date(dateString);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -219,6 +220,35 @@ function formatDateForInput(dateString) {
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
     return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
+function formatDateForInput(dt) {
+    const year = dt.year;
+    const month = dt.month.toString().padStart(2, '0');
+    const day = dt.day.toString().padStart(2, '0');
+    const hours = dt.hour.toString().padStart(2, '0');
+    const minutes = dt.minute.toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
+function formatDateForOutput(dt) {
+    let period = "AM";
+    let hour = dt.hour;
+
+    if (hour >= 12) {
+        period = "PM";
+        if (hour > 12) {
+            hour -= 12;
+        }
+    } else if (hour === 0) {
+        hour = 12;
+    }
+    const paddedHour = hour.toString().padStart(2, '0');
+    const paddedMonth = dt.month.toString().padStart(2, '0');
+    const paddedDay = dt.day.toString().padStart(2, '0');
+    const paddedMinute = dt.minute.toString().padStart(2, '0');
+    return `${dt.year}/${paddedMonth}/${paddedDay} ${paddedHour}:${paddedMinute} ${period}`;
 }
 /*============== End Modal Code ================*/
 

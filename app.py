@@ -186,7 +186,16 @@ def get_data():
     data = {
         'scores': [result.score_percentage for result in results],
         'total_qus': [result.total_questions for result in results],
-        'date_time': [result.timestamp for result in results],
+        'date_time': [
+            {
+                'year': result.timestamp.strftime('%Y'),
+                'month': result.timestamp.strftime('%m'),
+                'day': result.timestamp.strftime('%d'),
+                'hour': result.timestamp.strftime('%H'),
+                'minute': result.timestamp.strftime('%M')
+            }
+            for result in results
+        ],
         'topic': [result.topic for result in results],
     }
     return jsonify(data)
@@ -266,19 +275,25 @@ def delete_user_api(user_id):
 def get_all_results():
     results = QuizResult.query.all()
     data = {
-            'results': [
-                {
-                    'id': result.id,
-                    'user_id': result.user_id,
-                    'score': result.score,
-                    'total_questions': result.total_questions,
-                    'score_percentage': result.score_percentage,
-                    'topic': result.topic,
-                    'timestamp': result.timestamp,
-                }
-                for result in results
-            ]
-        }
+        'results': [
+            {
+                'id': result.id,
+                'user_id': result.user_id,
+                'score': result.score,
+                'total_questions': result.total_questions,
+                'score_percentage': result.score_percentage,
+                'topic': result.topic,
+                'timestamp': {
+                    'year': result.timestamp.strftime('%Y'),
+                    'month': result.timestamp.strftime('%m'),
+                    'day': result.timestamp.strftime('%d'),
+                    'hour': result.timestamp.strftime('%H'),
+                    'minute': result.timestamp.strftime('%M')
+                },
+            }
+            for result in results
+        ]
+    }
     return jsonify(data)
 
 @app.route('/add-result', methods=['POST'])

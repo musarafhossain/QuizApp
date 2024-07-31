@@ -41,7 +41,7 @@ function addDataToTable(data) {
         row.appendChild(totalQuestionsCell);
 
         const dateTimeCell = document.createElement("td");
-        dateTimeCell.textContent = new Date(data.date_time[i]).toLocaleString();
+        dateTimeCell.textContent = formatDateForOutput(data.date_time[i]);
         dateTimeCell.setAttribute("data-label", "Date and Time");
         row.appendChild(dateTimeCell);
 
@@ -73,4 +73,23 @@ const categoryMapping = {
 
 function getCategoryString(value) {
     return categoryMapping[value] || "Unknown Category";
+}
+
+function formatDateForOutput(dt) {
+    let period = "AM";
+    let hour = dt.hour;
+
+    if (hour >= 12) {
+        period = "PM";
+        if (hour > 12) {
+            hour -= 12;
+        }
+    } else if (hour === 0) {
+        hour = 12;
+    }
+    const paddedHour = hour.toString().padStart(2, '0');
+    const paddedMonth = dt.month.toString().padStart(2, '0');
+    const paddedDay = dt.day.toString().padStart(2, '0');
+    const paddedMinute = dt.minute.toString().padStart(2, '0');
+    return `${dt.year}/${paddedMonth}/${paddedDay} ${paddedHour}:${paddedMinute} ${period}`;
 }
