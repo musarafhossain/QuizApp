@@ -163,6 +163,12 @@ def history():
         return redirect('/login')
     return render_template('history.html')
 
+@app.route('/profile', methods=['GET'])
+def profile():
+    if 'user_id' not in session:
+        return redirect('/login')
+    user = User.query.filter_by(id=session['user_id']).first()
+    return render_template('profile.html', name = user.name, email = user.email, password = user.password, id = user.id)
 #------------------ API's ---------------------------#
 @app.route('/submit_result', methods=['POST'])
 def submit_result():
@@ -359,6 +365,15 @@ def update_result_api(id):
     result.timestamp = timestamp
     db.session.commit()
     return jsonify({'message': 'Result updated successfully'}), 200
+
+@app.route('/update-profile/<int:user_id>', methods=['PUT'])
+def update_profile_api(user_id):
+    user = User.query.get(user_id)
+    data = request.get_json()
+    user.name = data.get('name', user.name)
+    user.password = data.get('password', user.password)
+    db.session.commit()
+    return jsonify({'message': 'User updated successfully'}), 200
 #----------------- End API's -----------------------#
 
 #------------------ Helping Functions ---------------------------#
