@@ -231,7 +231,8 @@ def get_all_users():
                     'id': user.id,
                     'name': user.name,
                     'email': user.email,
-                    'password': user.password
+                    'password': user.password,
+                    'total_quizes': len(QuizResult.query.filter_by(user_id=user.id).all())
                 }
                 for user in users
             ]
@@ -443,7 +444,7 @@ def admin_logout():
     session['admin_logged_in'] = False
     return redirect(url_for('admin_login'))
 
-@app.route('/admin/dashboard')
+@app.route('/admin')
 def admin_dashboard():
     if not session.get('admin_logged_in'):
         return redirect(url_for('admin_login'))

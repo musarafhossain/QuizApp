@@ -30,6 +30,11 @@ function addDataToTable(data) {
         passwordCell.textContent = data[i].password;
         passwordCell.setAttribute("data-label", "User Password");
         row.appendChild(passwordCell);
+        
+        const totalQuizesCell = document.createElement("td");
+        totalQuizesCell.textContent = data[i].total_quizes;
+        totalQuizesCell.setAttribute("data-label", "User Password");
+        row.appendChild(totalQuizesCell);
 
         const actionCell = document.createElement("td");
         actionCell.setAttribute("data-label", "Action");
