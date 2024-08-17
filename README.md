@@ -69,11 +69,11 @@ Check out the live demo of the project [here](https://quizraf.pythonanywhere.com
 
     Open your browser and go to http://localhost:5000.
 
-##Contributing
+## Contributing
 Feel free to fork the repository and submit pull requests. For any issues or suggestions, please open an issue in the GitHub repository.
 
-##License
+## License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-##Contact
+## Contact
 For any questions or feedback, please reach out to myselfmusarafhossain786@gmail.com.
